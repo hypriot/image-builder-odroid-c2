@@ -5,7 +5,7 @@
 
 **Disclaimer:** This is work in progress and not yet finished. But if you want to help us and give feedback for the upcoming HypriotOS please read on. You can find the latest SD-Card image in the [GitHub releases page](https://github.com/hypriot/image-builder-odroid-c2/releases).
 
-This repo builds the SD card image with HypriotOS for the ODROID C2 board. To build this SD-Card image we have to
+This repo builds the SD card image with HypriotOS for the ODROID C2 ARM 64bit board. To build this SD-Card image we have to
 
  * take the files for the root filesystem from [`os-rootfs`](https://github.com/hypriot/os-rootfs)
  * add Hypriot's Debian repos
