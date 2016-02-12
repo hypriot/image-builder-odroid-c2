@@ -1,11 +1,11 @@
-# image-builder-odroid-c1
+# image-builder-odroid-c2
 [![Join the chat at https://gitter.im/hypriot/talk](https://badges.gitter.im/hypriot/talk.svg)](https://gitter.im/hypriot/talk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/hypriot/image-builder-odroid-c1.svg)](https://travis-ci.org/hypriot/image-builder-odroid-c1)
+[![Build Status](https://travis-ci.org/hypriot/image-builder-odroid-c2.svg)](https://travis-ci.org/hypriot/image-builder-odroid-c2)
 
 
-**Disclaimer:** This is work in progress and not yet finished. But if you want to help us and give feedback for the upcoming HypriotOS please read on. You can find the latest SD-Card image in the [GitHub releases page](https://github.com/hypriot/image-builder-odroid-c1/releases).
+**Disclaimer:** This is work in progress and not yet finished. But if you want to help us and give feedback for the upcoming HypriotOS please read on. You can find the latest SD-Card image in the [GitHub releases page](https://github.com/hypriot/image-builder-odroid-c2/releases).
 
-This repo builds the SD card image with HypriotOS for the ODROID C1 board. To build this SD-Card image we have to
+This repo builds the SD card image with HypriotOS for the ODROID C2 board. To build this SD-Card image we have to
 
  * take the files for the root filesystem from [`os-rootfs`](https://github.com/hypriot/os-rootfs)
  * add Hypriot's Debian repos
@@ -32,12 +32,12 @@ make docker-machine
 Now set the Docker environments to this new docker machine:
 
 ```bash
-eval $(docker-machine env image-builder-odroid-c1)
+eval $(docker-machine env image-builder-odroid-c2)
 ```
 
 ### Build the SD-Card image
 
-From here you can just make the SD-Card image. The output will be written and compressed to `sd-card-odroid-c1-dirty.img.zip`.
+From here you can just make the SD-Card image. The output will be written and compressed to `sd-card-odroid-c2-dirty.img.zip`.
 
 ```bash
 make sd-image
@@ -53,10 +53,10 @@ make test
 
 ### Run integration tests
 
-Now flash the SD-Card image and boot up a ODROID C1. Run the [Serverspec](http://serverspec.org) integration tests in `builder/test-integration/` folder against your ODROID C1. Set the environment variable `BOARD` to the IP address or host name of your running ODROID C1.
+Now flash the SD-Card image and boot up a ODROID C2. Run the [Serverspec](http://serverspec.org) integration tests in `builder/test-integration/` folder against your ODROID C2. Set the environment variable `BOARD` to the IP address or host name of your running ODROID C2.
 
 ```bash
-flash sd-card-odroid-c1-dirty.img.zip
+flash sd-card-odroid-c2-dirty.img.zip
 BOARD=black-pearl.local make test-integration
 ```
 

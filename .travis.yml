@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+language: bash
+script:
+  - make shellcheck
+  - VERSION=${TRAVIS_TAG} make sd-image
+branches:
+  only:
+    - master
+    - /^v\d.*$/
+deploy:
+  provider: releases
+  api_key:
+    secure: ZxbGrH2fjRBSFrCy3Q7kqOBZs/qeZ8QYXz3ZrbGBaoZlZuz9lZbrpBxwcaUbruyKvxx/J7iNeVBuSobz36K+qWQCe5OxOKkg14KzY0EOE6dLeIXWkTYX2ywYGgvlpzEhooly5KC6eJu5i3jyWjpUCBYOndZrAj4Zokx5v8hBQoLwf0LZB/KRQx7YAuz3f8jOkI881e+ic2rV+SNGPbocyNpcUZEBxeH2tsM+tBui7dThtSXzdc4QsJXnrsMrd+UAlrWqG+DTM+f+o9MWQbIOvY28pwHg2cdaIpd6+Y8tt1v+oT1nWThsaKQRYrk8wzi3SjoHTanaVuBa9jGaW4zzzl7zjGn385WN5FCwPoO3FTi+xOOzpWwucASXjs5LtQkgYfObk4Eo0LRdrjpfQZTlIzmoXElYSWWhhvQQh1gpagG/mCHGv/Vk09DDNHExk+U3KCR7BZISHiJ5F8Km3/1Gm27ewsO5cA8aGL6C6AwzynB7hkQgGvbnYr8MoeI2cfxKAKE1cH3zebdimas1gs/zsTDFIjrmu4bruZYf5V/I4MGsG3B/pwWsdWmRKRdOpylNNM/R791w3Ln/36oDqwQhHj5v7tlrNOqDa6hNg9YuKpOOBZMMHElxmqID0SepJzOZPv2EjFVOV5p7cpPL8z5NTy6mL9ZXpw4pj5s/6UjYzmk=
+  file:
+    - sd-card-odroid-c2-${TRAVIS_TAG}.img.zip
+  on:
+    tags: true
+    repo: hypriot/image-builder-odroid-c2
