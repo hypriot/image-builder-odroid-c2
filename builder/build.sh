@@ -112,7 +112,7 @@ EOF
 # log image partioning
 fdisk -l "/$HYPRIOT_IMAGE_NAME"
 
-# ensure that the travis-ci user can access the sd-card image file
+# ensure that the travis-ci user can access the SD card image file
 umask 0000
 
 # compress image
