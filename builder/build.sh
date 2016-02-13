@@ -24,7 +24,7 @@ ROOT_PARTITION_SIZE="800M"
 HYPRIOT_IMAGE_VERSION=${VERSION:="dirty"}
 HYPRIOT_IMAGE_NAME="sd-card-odroid-c2-${HYPRIOT_IMAGE_VERSION}.img"
 IMAGE_ROOTFS_PATH="/image-rootfs.tar.gz"
-QEMU_ARCH="arm"
+QEMU_ARCH="aarch64"
 export HYPRIOT_IMAGE_VERSION
 
 # specific versions of kernel/firmware and docker tools
@@ -82,8 +82,10 @@ tar -czf $IMAGE_ROOTFS_PATH -C $BUILD_PATH .
 
 #FIXME: use latest upstream u-boot files from hardkernel
 # download current bootloader/u-boot images from hardkernel
-wget -q https://raw.githubusercontent.com/mdrjr/c2_uboot_binaries/master/bl1.bin.hardkernel
-wget -q https://raw.githubusercontent.com/mdrjr/c2_uboot_binaries/master/u-boot.bin
+curl -sSL http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_bootloader.tar.gz | tar -C /tmp -xzvf -
+cp /tmp/c2_bootloader/bl1.bin.hardkernel .
+cp /tmp/c2_bootloader/u-boot.bin .
+rm -rf /tmp/c2_bootloader/
 
 guestfish <<EOF
 # create new image disk
