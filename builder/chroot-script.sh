@@ -9,8 +9,8 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 # set up ODROID repository
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AB19BAC9
-echo "deb http://deb.odroid.in/c2/ trusty main" > /etc/apt/sources.list.d/odroid.list
-echo "deb http://deb.odroid.in/ trusty main" >> /etc/apt/sources.list.d/odroid.list
+echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
+echo "deb http://deb.odroid.in/ xenial main" >> /etc/apt/sources.list.d/odroid.list
 
 # set up Hypriot Schatzkiste repository
 wget -q https://packagecloud.io/gpg.key -O - | apt-key add -
@@ -48,7 +48,7 @@ apt-get install -y u-boot-tools initramfs-tools
 
 # make the kernel package create a copy of the current kernel here
 touch /boot/uImage
-apt-get install -y linux-image-c2
+apt-get install -y linux-image-c2 bootini
 
 # set device label and version number
 echo "HYPRIOT_DEVICE=\"$HYPRIOT_DEVICE\"" >> /etc/os-release
