@@ -13,7 +13,7 @@ BUILD_RESULT_PATH="/workspace"
 BUILD_PATH="/build"
 
 # where to store our base file system
-HYPRIOT_OS_VERSION="v0.7.1"
+HYPRIOT_OS_VERSION="v0.7.2"
 ROOTFS_TAR="rootfs-arm64-${HYPRIOT_OS_VERSION}.tar.gz"
 ROOTFS_TAR_PATH="$BUILD_RESULT_PATH/$ROOTFS_TAR"
 
