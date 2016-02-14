@@ -82,7 +82,7 @@ tar -czf $IMAGE_ROOTFS_PATH -C $BUILD_PATH .
 
 #FIXME: use latest upstream u-boot files from hardkernel
 # download current bootloader/u-boot images from hardkernel
-curl -sSL http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_bootloader.tar.gz | tar -C /tmp -xzvf -
+wget -q -O - http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_bootloader.tar.gz | tar -C /tmp -xzvf -
 cp /tmp/c2_bootloader/bl1.bin.hardkernel .
 cp /tmp/c2_bootloader/u-boot.bin .
 rm -rf /tmp/c2_bootloader/
