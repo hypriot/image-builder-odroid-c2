@@ -110,7 +110,7 @@ upload u-boot.bin /boot/u-boot.bin
 upload /builder/boot.ini /boot/boot.ini
 copy-file-to-device /boot/bl1.bin.hardkernel /dev/sda size:442 sparse:true
 copy-file-to-device /boot/bl1.bin.hardkernel /dev/sda srcoffset:512 destoffset:512 sparse:true
-copy-file-to-device /boot/u-boot.bin /dev/sda destoffset:32768 sparse:true
+copy-file-to-device /boot/u-boot.bin /dev/sda destoffset:49664 sparse:true
 EOF
 
 # log image partioning
