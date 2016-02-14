@@ -11,9 +11,9 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AB19BAC9
 echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
 
-# set up Hypriot Schatzkiste repository
-wget -q https://packagecloud.io/gpg.key -O - | apt-key add -
-echo 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ wheezy main' > /etc/apt/sources.list.d/hypriot.list
+# # set up Hypriot Schatzkiste repository
+# wget -q https://packagecloud.io/gpg.key -O - | apt-key add -
+# echo 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ wheezy main' > /etc/apt/sources.list.d/hypriot.list
 
 # update all apt repository lists
 export DEBIAN_FRONTEND=noninteractive
