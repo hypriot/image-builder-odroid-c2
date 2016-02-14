@@ -10,7 +10,6 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 # set up ODROID repository
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AB19BAC9
 echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
-echo "deb http://deb.odroid.in/ xenial main" >> /etc/apt/sources.list.d/odroid.list
 
 # set up Hypriot Schatzkiste repository
 wget -q https://packagecloud.io/gpg.key -O - | apt-key add -
