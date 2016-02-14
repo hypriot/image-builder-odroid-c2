@@ -85,6 +85,7 @@ tar -czf $IMAGE_ROOTFS_PATH -C $BUILD_PATH .
 wget -q -O - http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_bootloader.tar.gz | tar -C /tmp -xzvf -
 cp /tmp/c2_bootloader/bl1.bin.hardkernel .
 cp /tmp/c2_bootloader/u-boot.bin .
+cp /tmp/c2_bootloader/sd_fusing.sh .
 rm -rf /tmp/c2_bootloader/
 
 guestfish <<EOF
@@ -103,6 +104,7 @@ tar-in $IMAGE_ROOTFS_PATH / compress:gzip
 #FIXME: use dd to directly writing u-boot to image file
 #FIXME2: later on, create a dedicated .deb package to install/update u-boot
 # write bootloader and u-boot into image start sectors 0-3071
+upload sd_fusing.sh /boot/sd_fusing.sh
 upload bl1.bin.hardkernel /boot/bl1.bin.hardkernel
 upload u-boot.bin /boot/u-boot.bin
 upload /builder/boot.ini /boot/boot.ini
