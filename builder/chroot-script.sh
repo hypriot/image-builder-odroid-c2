@@ -47,7 +47,8 @@ apt-get install -y u-boot-tools initramfs-tools
 
 # make the kernel package create a copy of the current kernel here
 touch /boot/uImage
-apt-get install -y linux-image-c2 bootini || apt-get install -f
+apt-get install -y linux-image-c2 || apt-get install -f
+ls -al /boot/*
 
 # set device label and version number
 echo "HYPRIOT_DEVICE=\"$HYPRIOT_DEVICE\"" >> /etc/os-release
