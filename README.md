@@ -37,7 +37,7 @@ eval $(docker-machine env image-builder-odroid-c2)
 
 ### Build the SD card image
 
-From here you can just make the SD card image. The output will be written and compressed to `sd-card-odroid-c2-dirty.img.zip`.
+From here you can just make the SD card image. The output will be written and compressed to `hypriotos-odroid-c2-dirty.img.zip`.
 
 ```bash
 make sd-image
@@ -56,7 +56,7 @@ make test
 Now flash the SD card image and boot up a ODROID C2. Run the [Serverspec](http://serverspec.org) integration tests in `builder/test-integration/` folder against your ODROID C2. Set the environment variable `BOARD` to the IP address or host name of your running ODROID C2.
 
 ```bash
-flash sd-card-odroid-c2-dirty.img.zip
+flash hypriotos-odroid-c2-dirty.img.zip
 BOARD=black-pearl.local make test-integration
 ```
 

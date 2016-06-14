@@ -13,7 +13,7 @@ testshell: build
 	docker run -ti --privileged -v $(shell pwd)/builder:/builder -v $(shell pwd):/workspace -v /boot:/boot -v /lib/modules:/lib/modules image-builder-odroid-c2 bash
 
 test:
-	VERSION=dirty docker run --rm -ti --privileged -v $(shell pwd):/workspace -v /boot:/boot -v /lib/modules:/lib/modules -e VERSION image-builder-odroid-c2 bash -c "unzip /workspace/sd-card-odroid-c2-dirty.img.zip && rspec --format documentation --color /workspace/builder/test/*_spec.rb"
+	VERSION=dirty docker run --rm -ti --privileged -v $(shell pwd):/workspace -v /boot:/boot -v /lib/modules:/lib/modules -e VERSION image-builder-odroid-c2 bash -c "unzip /workspace/hypriotos-odroid-c2-dirty.img.zip && rspec --format documentation --color /workspace/builder/test/*_spec.rb"
 
 shellcheck: build
 	VERSION=dirty docker run --rm -ti -v $(shell pwd):/workspace image-builder-odroid-c2 bash -c 'shellcheck /workspace/builder/*.sh /workspace/builder/files/etc/firstboot.d/*'

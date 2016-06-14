@@ -22,7 +22,7 @@ ROOT_PARTITION_SIZE="800M"
 
 # device specific settings
 HYPRIOT_IMAGE_VERSION=${VERSION:="dirty"}
-HYPRIOT_IMAGE_NAME="sd-card-odroid-c2-${HYPRIOT_IMAGE_VERSION}.img"
+HYPRIOT_IMAGE_NAME="hypriotos-odroid-c2-${HYPRIOT_IMAGE_VERSION}.img"
 IMAGE_ROOTFS_PATH="/image-rootfs.tar.gz"
 QEMU_ARCH="aarch64"
 export HYPRIOT_IMAGE_VERSION
