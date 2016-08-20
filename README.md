@@ -2,8 +2,7 @@
 [![Join the chat at https://gitter.im/hypriot/talk](https://badges.gitter.im/hypriot/talk.svg)](https://gitter.im/hypriot/talk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/hypriot/image-builder-odroid-c2.svg)](https://travis-ci.org/hypriot/image-builder-odroid-c2)
 
-
-**Disclaimer:** This is work in progress and not yet finished. But if you want to help us and give feedback for the upcoming HypriotOS please read on. You can find the latest SD card image in the [GitHub releases page](https://github.com/hypriot/image-builder-odroid-c2/releases).
+**! Please note: This work is deprecated and will not be continued at least in the near future. Nevertheless, everyone is welcome to contribute to this work.**
 
 This repo builds the SD card image with HypriotOS for the ODROID C2 ARM 64bit board. To build this SD card image we have to
 
