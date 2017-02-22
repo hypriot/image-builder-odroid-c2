@@ -6,7 +6,7 @@ end
 
 describe command('dpkg -l docker-machine') do
   its(:stdout) { should match /ii  docker-machine/ }
-  its(:stdout) { should match /0.4.1-72/ }
+  its(:stdout) { should match /0.9.0-39/ }
   its(:exit_status) { should eq 0 }
 end
 
@@ -17,17 +17,6 @@ describe file('/usr/local/bin/docker-machine') do
 end
 
 describe command('docker-machine --version') do
-  its(:stdout) { should match /0.4.1/m }
-  its(:stderr) { should match /^$/ }
-  its(:exit_status) { should eq 0 }
-end
-
-describe command('docker-machine create --help') do
-  its(:stdout) { should match /Available drivers:.*hypriot/ }
-  its(:stdout) { should match /--hypriot-ip-address/ }
-  its(:stdout) { should match /--hypriot-ssh-key/ }
-  its(:stdout) { should match /--hypriot-ssh-port/ }
-  its(:stdout) { should match /--hypriot-ssh-user/ }
-  its(:stderr) { should match /^$/ }
+  its(:stdout) { should match /0.9.0/m }
   its(:exit_status) { should eq 0 }
 end

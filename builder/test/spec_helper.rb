@@ -10,5 +10,5 @@ def run( cmd )
 end
 
 def run_mounted( cmd )
-  return run("mount /dev/sda1 / : #{cmd}")
+  return run("mount /dev/sda2 / : #{cmd}")
 end
