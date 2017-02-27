@@ -5,6 +5,6 @@ describe command('uname -r') do
   its(:exit_status) { should eq 0 }
 end
 
-describe file('/lib/modules/3.14.79-105/kernel') do
+describe file('/lib/modules/3.14.79-107/kernel') do
   it { should be_directory }
 end
