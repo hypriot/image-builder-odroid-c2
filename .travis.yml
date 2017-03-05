@@ -11,10 +11,11 @@ branches:
     - /^v\d.*$/
 deploy:
   provider: releases
-  api_key:
-    secure: nr2rOyatwZuzn+FNugjNVEAnG301TqGPsM7CorBMNKH72ND95w/Rf/ruyW/tljoDf4MOEJ+cuyyyONVG+bgxxAkY8dwbtDmrl0W6EjERkvhUqls1WUDLc1r+d3A+OHxpkmXtN5LxPjGaTpt4hYWjv4SEb18yYlmJaE5Nh83IImtVjVA1q2SUzfSe3cYaPKPG522lYO7owB+DWrdA98X8Sd0bdYoMVd1hLWBzicGcK1boA/7u7+RSl/yIZjbLillXYXFiyaU48hYyfIGjbh7/FYw0ofaqsGxn6BLV9EkyQfuyISwAEu5jMKbNRBBrbknVJWGfqW037Ss8lXyaXaFQ3omc43rpb8H90tfv75qn+WBi6Zn0cS/iMCpchkbN7Vx7HbYaqyYnkbK6Yd2yE6Z8pWQXvd9W+2MjZiGT/PKELMLDTUQ/bRpR7erIXuNbgvxpi1MHhHppIpnyRj6NewV8JWlsJ3PJOlkOqMYVezweTL3VzE/0yq5g/IQ0O1LRHIUVMQ9coW6y2/dddQhFy90Ayk8MvI//76jRAs/Vu22dPWWIuYoFTmZXMCAIwXmPBYKrlzk2T+l8F1Ma+jwDw0kCDHq3E5sYfY8vfnLIZRRC1MGnbruPLZJpI8jL075I1kQR954gVmFqGbziDpR0kJZzrInEj01iniEWuyQOljh2msE=
+  skip_cleanup: true
+  api_key: ${GITHUB_TOKEN}
   file:
     - hypriotos-odroid-c2-${TRAVIS_TAG}.img.zip
+    - hypriotos-odroid-c2-${TRAVIS_TAG}.img.zip.sha256
   on:
     tags: true
     repo: hypriot/image-builder-odroid-c2
