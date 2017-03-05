@@ -1,0 +1,6 @@
+#!/bin/bash
+set -ex
+
+echo timer > '/sys/class/leds/blue:heartbeat/trigger'
+echo 50 > '/sys/class/leds/blue:heartbeat/delay_on'
+echo 1000 > '/sys/class/leds/blue:heartbeat/delay_off'

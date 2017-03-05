@@ -1,36 +1,44 @@
 #!/bin/bash
 set -ex
 
-# sd card device name for ODROID C2
-SDCARD_DEVICE="/dev/mmcblk0"
-
-# install parted, if its not there
-if [ -z "$(which parted)" ]; then
-  apt-get update
-  apt-get install -y parted
+if ! [ -h /dev/disk/by-label/root ]; then
+  echo "/dev/disk/by-label/root does not exist or is not a symlink. Don't know how to expand"
+  return 0
 fi
 
-# show disk usage before changes
-df -h
+ROOT_PART=$(readlink /dev/disk/by-label/root)
+PART_NUM=${ROOT_PART#../../mmcblk0p}
+if [ "$PART_NUM" = "$ROOT_PART" ]; then
+  echo "/dev/disk/by-label/root is not an SD card. Don't know how to expand"
+  return 0
+fi
 
-# get partition number
-PART_NUM=$(parted $SDCARD_DEVICE -ms unit s p | tail -n 1 | cut -f 1 -d:)
-echo "$PART_NUM"
+# NOTE: the NOOBS partition layout confuses parted. For now, let's only
+# agree to work with a sufficiently simple partition layout
+if [ "$PART_NUM" -ne 2 ]; then
+  echo "Your partition layout is not currently supported by this tool. You are probably using NOOBS, in which case your root filesystem is already expanded anyway."
+  return 0
+fi
 
-# get partition start sector
-PART_START=$(parted $SDCARD_DEVICE -ms unit s p | grep "^$PART_NUM" | cut -f 2 -d:)
-echo "$PART_START"
+LAST_PART_NUM=$(parted /dev/mmcblk0 -ms unit s p | tail -n 1 | cut -f 1 -d:)
 
-# remove trailing "s"
+if [ "$LAST_PART_NUM" != "$PART_NUM" ]; then
+  echo "/dev/disk/by-label/root is not the last partition. Don't know how to expand"
+  return 0
+fi
+
+# Get the starting offset of the root partition
+PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^${PART_NUM}" | cut -f 2 -d:)
+# remove trailing 's'
 PART_START=${PART_START::-1}
-echo "$PART_START"
-
-# change partition table for resizing to maximum
+[ "$PART_START" ] || return 1
+# Return value will likely be error for fdisk as it fails to reload the
+# partition table because the root fs is mounted
 set +e
-fdisk $SDCARD_DEVICE <<EOF
+fdisk /dev/mmcblk0 <<EOF
 p
 d
-p
+$PART_NUM
 n
 p
 $PART_NUM
@@ -41,9 +49,5 @@ w
 EOF
 set -e
 
-# apply online resizing
 partprobe
-/sbin/resize2fs "${SDCARD_DEVICE}p${PART_NUM}"
-
-# show disk usage after changes
-df -h
+/sbin/resize2fs /dev/disk/by-label/root

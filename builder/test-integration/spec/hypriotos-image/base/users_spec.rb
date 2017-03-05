@@ -1,13 +1,11 @@
-require 'spec_helper'
-
-describe group('docker') do
-  it { should exist }
-end
-
 describe user('root') do
   it { should exist }
   it { should have_home_directory '/root' }
   it { should have_login_shell '/bin/bash' }
+end
+
+describe group('docker') do
+  it { should exist }
 end
 
 describe user('pirate') do
@@ -36,33 +34,12 @@ describe file('/etc/sudoers.d/user-pirate') do
   its(:content) { should match /pirate ALL=NOPASSWD: ALL/ }
 end
 
-describe file('/etc/skel/.bashrc') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-end
-describe file('/etc/skel/.bash_prompt') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-end
-describe file('/etc/skel/.profile') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-end
-
 describe file('/root/.bashrc') do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
 end
 describe file('/root/.bash_prompt') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-end
-describe file('/root/.profile') do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
@@ -74,11 +51,6 @@ describe file('/home/pirate/.bashrc') do
   it { should be_owned_by 'pirate' }
 end
 describe file('/home/pirate/.bash_prompt') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'pirate' }
-end
-describe file('/home/pirate/.profile') do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'pirate' }
