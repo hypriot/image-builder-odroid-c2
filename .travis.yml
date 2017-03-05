@@ -5,7 +5,6 @@ language: bash
 script:
   - make shellcheck
   - VERSION=${TRAVIS_TAG} make sd-image
-  - ls -l
 branches:
   only:
     - master
