@@ -6,7 +6,7 @@ end
 
 describe command('dpkg -l docker-engine') do
   its(:stdout) { should match /ii  docker-engine/ }
-  its(:stdout) { should match /1.13.1-0~debian-jessie/ }
+  its(:stdout) { should match /17.03.0~ce-0~debian-jessie/ }
   its(:exit_status) { should eq 0 }
 end
 
@@ -65,7 +65,7 @@ describe file('/var/lib/docker') do
   it { should be_owned_by 'root' }
 end
 
-describe file('/var/lib/docker/overlay') do
+describe file('/var/lib/docker/aufs') do
   it { should be_directory }
   it { should be_mode 700 }
   it { should be_owned_by 'root' }
@@ -79,18 +79,18 @@ describe file('/etc/bash_completion.d/docker') do
 end
 
 describe command('docker -v') do
-  its(:stdout) { should match /Docker version 1.13.1, build/ }
+  its(:stdout) { should match /Docker version 17.03.0-ce, build/ }
   its(:exit_status) { should eq 0 }
 end
 
 describe command('docker version') do
-  its(:stdout) { should match /Client:. Version:      1.13.1. API version:  1.26/m }
-  its(:stdout) { should match /Server:. Version:      1.13.1. API version:  1.26/m }
+  its(:stdout) { should match /Client:. Version:      17.03.0-ce. API version:  1.26/m }
+  its(:stdout) { should match /Server:. Version:      17.03.0-ce. API version:  1.26/m }
   its(:exit_status) { should eq 0 }
 end
 
 describe command('docker info') do
-  its(:stdout) { should match /Storage Driver: overlay/ }
+  its(:stdout) { should match /Storage Driver: aufs/ }
   its(:exit_status) { should eq 0 }
 end
 
