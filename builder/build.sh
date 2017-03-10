@@ -123,7 +123,7 @@ _EOF_
 umask 0000
 
 # compress image
-pigz --zip -c "${BUILD_RESULT_PATH}/$HYPRIOT_IMAGE_NAME" > "$HYPRIOT_IMAGE_NAME.zip"
+pigz --zip -c "${HYPRIOT_IMAGE_NAME}" > "${BUILD_RESULT_PATH}/${HYPRIOT_IMAGE_NAME}.zip"
 cd ${BUILD_RESULT_PATH} && sha256sum "${HYPRIOT_IMAGE_NAME}.zip" > "${HYPRIOT_IMAGE_NAME}.zip.sha256" && cd -
 
 # test sd-image that we have built
