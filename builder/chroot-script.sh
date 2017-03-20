@@ -140,25 +140,30 @@ packages=(
     libseccomp2
     libltdl7
 
-    # install docker-compose, and docker-machine
-    libc6:armhf
-    zlib1g:armhf
-    docker-compose:armhf=${DOCKER_COMPOSE_VERSION}
-    docker-machine:armhf=${DOCKER_MACHINE_VERSION}
+    # required to install docker-compose
+    python-pip
 )
 
-apt-get -y install ${packages[*]}
-
-# install linux kernel for Odroid C2
-apt-get -y install \
-    u-boot-tools \
-    linux-image-c2="${KERNEL_VERSION}"
+apt-get -y install --no-install-recommends ${packages[*]}
 
 # install docker-engine
 DOCKER_DEB=$(mktemp)
 wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
 echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
 dpkg -i "$DOCKER_DEB"
+
+# install docker-compose
+pip install docker-compose=="${DOCKER_COMPOSE_VERSION}"
+
+# install docker-machine
+curl -L "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+# install linux kernel for Odroid C2
+apt-get -y install \
+    --no-install-recommends \
+    u-boot-tools \
+    "linux-image-${KERNEL_VERSION}"
 
 # Restore os-release additions
 cat /tmp/os-release.add >> /etc/os-release
