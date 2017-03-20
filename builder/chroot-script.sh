@@ -99,6 +99,9 @@ export DEST
 mkdir -p "$(dirname "${DEST}")"
 echo "nameserver 8.8.8.8" > "${DEST}"
 
+# set up debian jessie backports
+echo "deb http://httpredir.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
+
 # set up ODROID repository
 ODROID_KEY_ID=AB19BAC9
 get_gpg $ODROID_KEY_ID
@@ -134,6 +137,7 @@ packages=(
     cgroupfs-mount
     cgroup-bin
     apparmor
+    libseccomp2
     libltdl7
 
     # install docker-compose, and docker-machine
@@ -146,7 +150,9 @@ packages=(
 apt-get -y install ${packages[*]}
 
 # install linux kernel for Odroid C2
-apt-get -y install u-boot-tools linux-image-c2
+apt-get -y install \
+    u-boot-tools \
+    linux-image-c2="${KERNEL_VERSION}"
 
 # install docker-engine
 DOCKER_DEB=$(mktemp)
