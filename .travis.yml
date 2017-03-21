@@ -9,6 +9,7 @@ branches:
   only:
     - master
     - /^v\d.*$/
+    - /^feature\/.*$/
 deploy:
   provider: releases
   skip_cleanup: true
