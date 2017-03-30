@@ -1,3 +1,2 @@
-*.xz
-*.gz
-*.zip
+*
+!builder
