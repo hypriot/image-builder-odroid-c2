@@ -9,10 +9,7 @@ describe group('docker') do
 end
 
 describe user('pirate') do
-  it { should exist }
-  it { should have_home_directory '/home/pirate' }
-  it { should have_login_shell '/bin/bash' }
-  it { should belong_to_group 'docker' }
+  it { should_not exist }
 end
 
 describe file('/etc/sudoers') do
@@ -28,10 +25,7 @@ describe file('/etc/sudoers.d') do
 end
 
 describe file('/etc/sudoers.d/user-pirate') do
-  it { should be_file }
-  it { should be_mode 440 }
-  it { should be_owned_by 'root' }
-  its(:content) { should match /pirate ALL=NOPASSWD: ALL/ }
+  it { should_not be_file }
 end
 
 describe file('/root/.bashrc') do
@@ -45,13 +39,6 @@ describe file('/root/.bash_prompt') do
   it { should be_owned_by 'root' }
 end
 
-describe file('/home/pirate/.bashrc') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'pirate' }
-end
-describe file('/home/pirate/.bash_prompt') do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'pirate' }
+describe file('/home/pirate') do
+  it { should_not be_directory }
 end
