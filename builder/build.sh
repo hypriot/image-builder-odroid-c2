@@ -95,7 +95,7 @@ echo "${RAW_IMAGE_CHECKSUM} ${BUILD_RESULT_PATH}/${RAW_IMAGE}.zip" | sha256sum -
 unzip -p "${BUILD_RESULT_PATH}/${RAW_IMAGE}" > "/${HYPRIOT_IMAGE_NAME}"
 
 # download current bootloader/u-boot images from hardkernel
-wget -q -O - http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_boot_release.tar.gz | tar -C /tmp -xzvf -
+wget -q -O - http://dn.odroid.com/S905/BootLoader/ODROID-C2/c2_boot_release_ubuntu.tar.gz | tar -C /tmp -xzvf -
 cp /tmp/sd_fuse/bl1.bin.hardkernel .
 cp /tmp/sd_fuse/u-boot.bin .
 cp /tmp/sd_fuse/sd_fusing.sh .
