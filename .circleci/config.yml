@@ -40,4 +40,4 @@ workflows:
       - build:
           filters:
             tags:
-only: /.*/
+                only: /.*/
