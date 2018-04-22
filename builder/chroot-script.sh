@@ -164,7 +164,7 @@ packages=(
     python-wheel
 )
 
-apt-get -y install --no-install-recommends "${packages[*]}"
+apt-get -y install --no-install-recommends "${packages[@]}"
 
 # install docker-engine
 apt-get install -y --force-yes \
