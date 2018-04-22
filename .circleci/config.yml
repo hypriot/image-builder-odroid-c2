@@ -5,10 +5,10 @@ jobs:
     steps:
       - checkout
 
-      # - run:
-      #    name: Run Shellcheck
-      #    command: |
-      #      make shellcheck
+      - run:
+         name: Run Shellcheck
+         command: |
+           make shellcheck
 
       - run:
           name: Create SD image
