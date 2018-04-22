@@ -102,6 +102,7 @@ cp /tmp/sd_fuse/u-boot.bin .
 cp /tmp/sd_fuse/sd_fusing.sh .
 rm -rf /tmp/sd_fuse/
 
+export LIBGUESTFS_DEBUG=1
 guestfish -a "/${HYPRIOT_IMAGE_NAME}" << _EOF_
   run
 
