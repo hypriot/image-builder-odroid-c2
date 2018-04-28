@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+language: bash
+script:
+  - make shellcheck
+  - VERSION=${TRAVIS_TAG} make sd-image
+branches:
+  only:
+    - master
+    - /^v\d.*$/
+    - /^feature\/.*$/
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: ${GITHUB_TOKEN}
+  file:
+    - hypriotos-odroid-c2-${TRAVIS_TAG}.img.zip
+    - hypriotos-odroid-c2-${TRAVIS_TAG}.img.zip.sha256
+  on:
+    tags: true
+    repo: hypriot/image-builder-odroid-c2

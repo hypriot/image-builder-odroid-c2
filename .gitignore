@@ -3,6 +3,4 @@
 *.img.zip.sha256
 *.tar.gz
 *.xz
-*.swp
 .vagrant/
-*.log

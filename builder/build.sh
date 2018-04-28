@@ -8,7 +8,6 @@ if [ ! -f /.dockerenv ]; then
 fi
 
 # get versions for software that needs to be installed
-# shellcheck disable=SC1091
 source /workspace/versions.config
 
 ### setting up some important variables to control the build process
@@ -102,7 +101,6 @@ cp /tmp/sd_fuse/u-boot.bin .
 cp /tmp/sd_fuse/sd_fusing.sh .
 rm -rf /tmp/sd_fuse/
 
-export LIBGUESTFS_DEBUG=1
 guestfish -a "/${HYPRIOT_IMAGE_NAME}" << _EOF_
   run
 

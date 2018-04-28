@@ -40,23 +40,6 @@ function clean_print(){
 }
 
 
-function try_apt_key(){
-    counter=0;
-    status=0;
-
-    while [[ $counter -lt 5 && status -ne 0 ]]; do
-        apt-key adv --keyserver "$1" --recv-keys "$2" || status=$?
-        counter+=1
-
-        if [[ $status -ne 0 ]]; then
-            sleep 1
-        fi
-    done
-    
-    return $status
-}
-
-
 function get_gpg(){
   GPG_KEY="${1}"
   KEY_URL="${2}"
@@ -71,7 +54,7 @@ function get_gpg(){
   elif [[ -z "${KEY_URL}" ]]; then
     echo "no source given try to load from key server"
 #    gpg --keyserver "${KEYSERVER}" --recv-keys "${GPG_KEY}"
-    try_apt_key "${KEYSERVER}" "${GPG_KEY}"
+    apt-key adv --keyserver "${KEYSERVER}" --recv-keys "${GPG_KEY}"
     return $?
   else
     echo "keyfile given"
@@ -116,28 +99,24 @@ export DEST
 mkdir -p "$(dirname "${DEST}")"
 echo "nameserver 8.8.8.8" > "${DEST}"
 
-# Install the dirmngr for GPG usage
-apt-get update
-apt-get install dirmngr
-
-# set up Docker CE repository
-DOCKERREPO_FPR=9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-DOCKERREPO_KEY_URL=https://download.docker.com/linux/debian/gpg
-get_gpg "${DOCKERREPO_FPR}" "${DOCKERREPO_KEY_URL}"
-
-CHANNEL=edge # stable, test or edge
-echo "deb [arch=arm64] https://download.docker.com/linux/debian stretch $CHANNEL" > /etc/apt/sources.list.d/docker.list
-
 # set up debian jessie backports
-echo "deb http://httpredir.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
+echo "deb http://httpredir.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
 
 # set up ODROID repository
 ODROID_KEY_ID=AB19BAC9
 get_gpg $ODROID_KEY_ID
 echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
 
+# set up hypriot arm repository for odroid packages
+PACKAGECLOUD_FPR=418A7F2FB0E1E6E7EABF6FE8C2E73424D59097AB
+PACKAGECLOUD_KEY_URL=https://packagecloud.io/gpg.key
+get_gpg "${PACKAGECLOUD_FPR}" "${PACKAGECLOUD_KEY_URL}"
+
+# set up hypriot schatzkiste repository for generic packages
+echo 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ jessie main' >> /etc/apt/sources.list.d/hypriot.list
+
 # add armhf as additional architecure (see below)
-dpkg --add-architecture arm64
+dpkg --add-architecture armhf
 
 # update all apt repository lists
 export DEBIAN_FRONTEND=noninteractive
@@ -148,6 +127,9 @@ apt-get upgrade -y
 packages=(
     # as the Odroid C2 does not have a hardware clock we need a fake one
     fake-hwclock
+
+    # install device-init
+    device-init:armhf=${DEVICE_INIT_VERSION}
 
     # install dependencies for docker-tools
     lxc
@@ -160,16 +142,15 @@ packages=(
 
     # required to install docker-compose
     python-pip
-    python-setuptools
-    python-wheel
 )
 
-apt-get -y install --no-install-recommends "${packages[@]}"
+apt-get -y install --no-install-recommends ${packages[*]}
 
 # install docker-engine
-apt-get install -y --force-yes \
-    --no-install-recommends \
-    "docker-ce=${DOCKER_CE_VERSION}"
+DOCKER_DEB=$(mktemp)
+wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
+echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
+dpkg -i "$DOCKER_DEB"
 
 # install docker-compose
 pip install docker-compose=="${DOCKER_COMPOSE_VERSION}"
