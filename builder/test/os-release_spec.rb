@@ -8,7 +8,7 @@ describe "Root filesystem" do
   end
 
   it "is debian version jessie" do
-    expect(stdout).to contain('jessie')
+    expect(stdout).to contain('stretch')
   end
 
   it "is a HypriotOS" do
@@ -36,8 +36,8 @@ describe "Root filesystem" do
     expect(stdout).to contain('HYPRIOT_DEVICE="ODROID C2')
   end
 
-  it "uses os-rootfs version 'HYPRIOT_OS_VERSION=\"v1.1.1\"'" do
-    expect(stdout).to contain('^HYPRIOT_OS_VERSION="v1.1.1"$')
+  it "uses os-rootfs version 'HYPRIOT_OS_VERSION=\"v2.0.1\"'" do
+    expect(stdout).to contain('^HYPRIOT_OS_VERSION="v2.0.1"$')
   end
 
   if ENV.fetch('TRAVIS_TAG','') != ''

@@ -3,4 +3,5 @@
 *.img.zip.sha256
 *.tar.gz
 *.xz
+*-console.log
 .vagrant/
