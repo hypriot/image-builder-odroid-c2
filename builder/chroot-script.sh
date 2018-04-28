@@ -153,6 +153,8 @@ packages=(
     # make sure some extra kernel tools are prepared
     initramfs-tools
 
+    cloud-init
+
     # install dependencies for docker-tools
     lxc
     aufs-tools
@@ -170,11 +172,20 @@ packages=(
 
 apt-get -y install --no-install-recommends "${packages[@]}"
 
+# set up cloud-init
+sed -i '/disable_root: true/a apt_preserve_sources_list: true' /etc/cloud/cloud.cfg
+
+mkdir -p /var/lib/cloud/seed/nocloud-net
+ln -s /boot/user-data /var/lib/cloud/seed/nocloud-net/user-data
+ln -s /boot/meta-data /var/lib/cloud/seed/nocloud-net/meta-data
+
 # install docker-engine
 apt-get -y install docker-ce="${DOCKER_CE_VERSION}"
+curl -sSL https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
 
 # install docker-compose
 pip install docker-compose=="${DOCKER_COMPOSE_VERSION}"
+curl -sSL "https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose" -o /etc/bash_completion.d/docker-compose
 
 # install docker-machine
 curl -L "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-machine
