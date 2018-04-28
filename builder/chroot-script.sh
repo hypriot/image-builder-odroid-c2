@@ -39,6 +39,29 @@ function clean_print(){
   fi
 }
 
+function try_gpg_receive(){
+  set +e
+
+  GPG_KEY="$1"
+
+  counter=0;
+  status=1;
+
+  while [[ $counter -lt 5 && $status -ne 0 ]]; do
+      apt-key adv --keyserver "$KEYSERVER" --recv-keys "$GPG_KEY"
+      status=$?
+      ((counter+=1))
+
+      if [[ $status -ne 0 ]]; then
+          sleep 1
+      fi
+  done
+
+  set -e
+  
+  return $status
+}
+
 
 function get_gpg(){
   GPG_KEY="${1}"
@@ -53,8 +76,7 @@ function get_gpg(){
     wget -q -O "${KEY_FILE}" "${KEY_URL}"
   elif [[ -z "${KEY_URL}" ]]; then
     echo "no source given try to load from key server"
-#    gpg --keyserver "${KEYSERVER}" --recv-keys "${GPG_KEY}"
-    apt-key adv --keyserver "${KEYSERVER}" --recv-keys "${GPG_KEY}"
+    try_gpg_receive "$GPG_KEY"
     return $?
   else
     echo "keyfile given"
@@ -100,36 +122,38 @@ mkdir -p "$(dirname "${DEST}")"
 echo "nameserver 8.8.8.8" > "${DEST}"
 
 # set up debian jessie backports
-echo "deb http://httpredir.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
-
-# set up ODROID repository
-ODROID_KEY_ID=AB19BAC9
-get_gpg $ODROID_KEY_ID
-echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
-
-# set up hypriot arm repository for odroid packages
-PACKAGECLOUD_FPR=418A7F2FB0E1E6E7EABF6FE8C2E73424D59097AB
-PACKAGECLOUD_KEY_URL=https://packagecloud.io/gpg.key
-get_gpg "${PACKAGECLOUD_FPR}" "${PACKAGECLOUD_KEY_URL}"
-
-# set up hypriot schatzkiste repository for generic packages
-echo 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ jessie main' >> /etc/apt/sources.list.d/hypriot.list
-
-# add armhf as additional architecure (see below)
-dpkg --add-architecture armhf
+echo "deb http://httpredir.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/jessie-backports.list
 
 # update all apt repository lists
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get upgrade -y
 
-# define packages to install
+# dirmngr needed for gpg
+apt-get -y install --no-install-recommends dirmngr
+
+# set up ODROID repository
+ODROID_KEY_ID=AB19BAC9
+get_gpg $ODROID_KEY_ID
+echo "deb http://deb.odroid.in/c2/ xenial main" > /etc/apt/sources.list.d/odroid.list
+
+# set up Docker engine repository
+DOCKER_KEY_ID=0EBFCD88
+get_gpg $DOCKER_KEY_ID
+echo "deb https://download.docker.com/linux/debian stretch stable" > /etc/apt/sources.list.d/docker.list
+
+# update apt after adding repositories
+apt-get update
+
+# packages needed for the rest of the system
 packages=(
     # as the Odroid C2 does not have a hardware clock we need a fake one
     fake-hwclock
 
-    # install device-init
-    device-init:armhf=${DEVICE_INIT_VERSION}
+    # make sure some extra kernel tools are prepared
+    initramfs-tools
+
+    cloud-init
 
     # install dependencies for docker-tools
     lxc
@@ -142,18 +166,26 @@ packages=(
 
     # required to install docker-compose
     python-pip
+    python-setuptools
+    python-wheel
 )
 
-apt-get -y install --no-install-recommends ${packages[*]}
+apt-get -y install --no-install-recommends "${packages[@]}"
+
+# set up cloud-init
+sed -i '/disable_root: true/a apt_preserve_sources_list: true' /etc/cloud/cloud.cfg
+
+mkdir -p /var/lib/cloud/seed/nocloud-net
+ln -s /boot/user-data /var/lib/cloud/seed/nocloud-net/user-data
+ln -s /boot/meta-data /var/lib/cloud/seed/nocloud-net/meta-data
 
 # install docker-engine
-DOCKER_DEB=$(mktemp)
-wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
-echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
-dpkg -i "$DOCKER_DEB"
+apt-get -y install docker-ce="${DOCKER_CE_VERSION}"
+curl -sSL https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
 
 # install docker-compose
 pip install docker-compose=="${DOCKER_COMPOSE_VERSION}"
+curl -sSL "https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose" -o /etc/bash_completion.d/docker-compose
 
 # install docker-machine
 curl -L "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-machine

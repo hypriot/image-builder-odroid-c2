@@ -8,6 +8,7 @@ if [ ! -f /.dockerenv ]; then
 fi
 
 # get versions for software that needs to be installed
+# shellcheck disable=SC1091
 source /workspace/versions.config
 
 ### setting up some important variables to control the build process
@@ -21,14 +22,20 @@ BUILD_PATH="/build"
 ROOTFS_TAR="rootfs-arm64-debian-${HYPRIOT_OS_VERSION}.tar.gz"
 ROOTFS_TAR_PATH="$BUILD_RESULT_PATH/$ROOTFS_TAR"
 
-# Show TRAVSI_TAG in travis builds
-echo TRAVIS_TAG="${TRAVIS_TAG}"
+# Show CIRCLE_TAG in travis builds
+echo CIRCLE_TAG="${TRAVIS_TAG}"
 
 # name of the sd-image we gonna create
 HYPRIOT_IMAGE_VERSION=${VERSION:="dirty"}
 HYPRIOT_IMAGE_NAME="hypriotos-odroid-c2-${HYPRIOT_IMAGE_VERSION}.img"
 QEMU_ARCH="aarch64"
 export HYPRIOT_IMAGE_VERSION
+
+# fix a buggy version of supermin
+# TODO(bspeice): Should be fixed at image-builder level, not here
+echo "deb http://httpredir.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
+apt-get update
+apt-get install supermin=5.1.19-1~bpo9+1
 
 # create build directory for assembling our image filesystem
 rm -rf $BUILD_PATH
@@ -118,9 +125,6 @@ guestfish -a "/${HYPRIOT_IMAGE_NAME}" << _EOF_
   copy-file-to-device /boot/bl1.bin.hardkernel /dev/sda srcoffset:512 destoffset:512 sparse:true
   copy-file-to-device /boot/u-boot.bin /dev/sda destoffset:49664 sparse:true
 _EOF_
-
-# ensure that the travis-ci user can access the SD card image file
-umask 0000
 
 # compress image
 pigz --zip -c "${HYPRIOT_IMAGE_NAME}" > "${BUILD_RESULT_PATH}/${HYPRIOT_IMAGE_NAME}.zip"
