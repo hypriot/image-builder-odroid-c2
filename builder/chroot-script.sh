@@ -179,6 +179,9 @@ mkdir -p /var/lib/cloud/seed/nocloud-net
 ln -s /boot/user-data /var/lib/cloud/seed/nocloud-net/user-data
 ln -s /boot/meta-data /var/lib/cloud/seed/nocloud-net/meta-data
 
+# boot/cmdline.txt
+echo "root=/dev/mmcblk0p2 rootfstype=ext4 rootwait ro console=ttyS0,115200n8 console=tty0 no_console_suspend hdmimode=1080p60hz  m_bpp=32 vout= fsck.repair=yes net.ifnames=0 elevator=deadline cgroup_enable=memory cgroup_enable=cpuset swapaccount=1 disablehpd=true max_freq=1536 maxcpus=4 monitor_onoff=false disableuhs=false mmc_removable=true init=/usr/lib/init_resize.sh" > /boot/cmdline.txt
+
 # install docker-engine
 apt-get -y install docker-ce="${DOCKER_CE_VERSION}"
 curl -sSL https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
