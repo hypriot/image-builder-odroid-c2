@@ -18,13 +18,11 @@ dev=${dev_p2%??}
 
 case "$1" in
     start)
-		if [ -f /.first_boot ]; then
-	
-			# ok, its the very first boot, we need to resize the disk.
-			p2_start=`fdisk -l $dev | grep p2 | awk '{print $2}'`
-			p2_finish=$((`fdisk -l $dev | grep Disk | grep sectors | awk '{printf $7}'` - 2048))
-			
-			fdisk $dev <<EOF &>> /home/odroid/resize.log
+        # ok, its the very first boot, we need to resize the disk.
+        p2_start=`fdisk -l $dev | grep p2 | awk '{print $2}'`
+        p2_finish=$((`fdisk -l $dev | grep Disk | grep sectors | awk '{printf $7}'` - 2048))
+        
+        fdisk $dev <<EOF &>> /home/odroid/resize.log
 p
 d
 2
@@ -36,19 +34,12 @@ $p2_finish
 p
 w
 EOF
-			rm -fr /.first_boot
-			[ ! -f /etc/ssh/ssh_host_rsa_key ] && dpkg-reconfigure openssh-server
-			sync
-			poweroff
-			
-		else
-		
-			# ok, we already resized!
-			
-			log_daemon_msg "Resizing /" &&
-			resize2fs $dev_p2 &&
-			rm -fr /aafirstboot
-		fi
+        partprobe
+        log_daemon_msg "Resizing /" &&
+        resize2fs $dev_p2 &&
+        rm -rf /aafirstboot
+        [ ! -f /etc/ssh/ssh_host_rsa_key ] && dpkg-reconfigure openssh-server
+        sync
 	;;
     restart|reload|force-reload)
         echo "Error: argument '$1' not supported" >&2

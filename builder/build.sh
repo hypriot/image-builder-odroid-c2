@@ -68,7 +68,6 @@ mount -t sysfs none $BUILD_PATH/sys
 # modify/add image files directly
 # e.g. root partition resize script
 cp -R /builder/files/* $BUILD_PATH/
-touch $BUILD_PATH/.first_boot
 
 # make our build directory the current root
 # and install the kernel packages, docker tools
